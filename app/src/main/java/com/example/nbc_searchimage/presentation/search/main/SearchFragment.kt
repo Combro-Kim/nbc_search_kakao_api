@@ -26,7 +26,7 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<SearchViewModel>{
-        SearchViewModelFactory(SelectedItemRepository(MyDatabase.getDatabase(requireContext()).selectedItemDao()))
+        SearchViewModelFactory()
     }
 
     private lateinit var adapter: ImageListAdapter
@@ -51,7 +51,7 @@ class SearchFragment : Fragment() {
         val setSearchWord = SharedPreferencesManager.setSearchWord(requireContext())
         binding.etSearch.setText(setSearchWord)
         if(!setSearchWord.isNullOrEmpty()){
-            viewModel.searchImages(setSearchWord)
+            viewModel.getSearchImageList(setSearchWord)
         }
 
 //        //검색 결과 리스트 show
@@ -88,17 +88,17 @@ class SearchFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        viewModel.imageItems.observe(viewLifecycleOwner) { images ->
+        viewModel.getSearchImageList.observe(viewLifecycleOwner) { images ->
             adapter.submitList(images)
             //ListAdapter에 속한 메서드로 Recyclerview에 표시할 데이터 목록을 제출하는데 사용된다.
             //새 데이터와 기존 데이터를ㄹ 비교하여 변경 내용을 개선하고 Recyclerview를 업데이트한다.
             //submitList(새로운 데이터)
 //            SharedPreferencesManager.getSearchResult(requireContext(), images) //검색 결과 리스트 저장
         }
-        viewModel.isLikedItems.observe(viewLifecycleOwner) { items ->
-            likedItems = items.map { it.thumbnailUrl }.toMutableSet() // 좋아요된 이미지들의 URL을 업데이트
-            adapter.likedItems = likedItems // 어댑터에 좋아요된 이미지들의 URL 집합 전달
-        }
+//        viewModel.isLikedItems.observe(viewLifecycleOwner) { items ->
+//            likedItems = items.map { it.thumbnailUrl }.toMutableSet() // 좋아요된 이미지들의 URL을 업데이트
+//            adapter.likedItems = likedItems // 어댑터에 좋아요된 이미지들의 URL 집합 전달
+//        }
     }
 
     //검색
@@ -106,7 +106,7 @@ class SearchFragment : Fragment() {
         binding.btnSearch.setOnClickListener {
             hideKeyboard()
             val searchWord = binding.etSearch.text.toString()
-            viewModel.searchImages(searchWord)
+            viewModel.getSearchImageList(searchWord)
             SharedPreferencesManager.getSearchWord(requireContext(), searchWord) //검색어 저장
         }
     }

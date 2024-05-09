@@ -1,6 +1,7 @@
-package com.example.nbc_searchimage.retrofit
+package com.example.nbc_searchimage.network
 
 import com.example.nbc_searchimage.BuildConfig
+import com.example.nbc_searchimage.data.remote.SearchRemoteDataSource
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -8,9 +9,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 // retrofit을 사용하기 위한 세팅
-object NetWorkClient {
+object RetrofitClient {
 
-    private const val SEARCH_BASE_URL = "https://dapi.kakao.com/v2/search/"
+    private const val SEARCH_BASE_URL = "https://dapi.kakao.com/"
 
     private fun createOkHttpClient(): OkHttpClient {
         val interceptor = HttpLoggingInterceptor()
@@ -36,5 +37,5 @@ object NetWorkClient {
         .client(createOkHttpClient())
         .build()
 
-    val searchNetWork: NetWorkInterface = searchRetrofit.create(NetWorkInterface::class.java)
+    val searchNetWork: SearchRemoteDataSource = searchRetrofit.create(SearchRemoteDataSource::class.java)
 }
