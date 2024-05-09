@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">nbc_searchImage</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="kakao_api_key">KakaoAK a1f5c532c747be7eb01ade357afef92a</string>
+    <string name="search">검색</string>
+    <string name="myStorage">보관함</string>
+
+
+</resources>
