@@ -23,7 +23,7 @@ class ImageListAdapter : ListAdapter<Document, ImageListViewHolder>(ImageDiffCal
 
     override fun onBindViewHolder(holder: ImageListViewHolder, position: Int) {
         val imageItem = getItem(position)
-        val isLiked = imageItem.thumbnail_url in likedItems
+        val isLiked = imageItem.thumbnailUrl in likedItems
         holder.bind(imageItem,isLiked)
         holder.itemView.setOnClickListener {
             itemClick?.onClick(it,position)
@@ -33,7 +33,7 @@ class ImageListAdapter : ListAdapter<Document, ImageListViewHolder>(ImageDiffCal
     // 기존 <-> 변경되는 데이터 확인
     private class ImageDiffCallback : DiffUtil.ItemCallback<Document>() {
         override fun areItemsTheSame(oldItem: Document, newItem: Document): Boolean {
-            return oldItem.thumbnail_url == newItem.thumbnail_url
+            return oldItem.thumbnailUrl == newItem.thumbnailUrl
         }
 
         override fun areContentsTheSame(oldItem: Document, newItem: Document): Boolean {

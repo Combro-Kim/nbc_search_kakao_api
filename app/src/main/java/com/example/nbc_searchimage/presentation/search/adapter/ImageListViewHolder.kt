@@ -13,12 +13,12 @@ class ImageListViewHolder(private val binding: ItemListBinding) : RecyclerView.V
 
     fun bind(imageItem: Document, isLiked: Boolean) {
         binding.apply {
-            tvSiteName.text = imageItem.display_sitename
+            tvSiteName.text = imageItem.displaySiteName
             val dateTime = OffsetDateTime.parse(imageItem.datetime)
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             tvDate.text = dateTime.format(formatter)
             Glide.with(itemView.context)
-                .load(imageItem.thumbnail_url)
+                .load(imageItem.thumbnailUrl)
                 .into(ivThumbnail)
 
             ivHeart.visibility = if (isLiked) View.VISIBLE else View.GONE

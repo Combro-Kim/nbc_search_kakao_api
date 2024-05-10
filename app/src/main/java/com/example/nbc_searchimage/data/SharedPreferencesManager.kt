@@ -26,18 +26,4 @@ object SharedPreferencesManager {
     fun setSearchWord(context: Context): String? {
         return getSharedPreferences(context).getString(SEARCH_WORD, null)
     }
-
-//    fun getSearchResult(context: Context, searchList: List<Document>) {
-//        searchList.let {
-//            val jsonString = Gson().toJson(searchList)
-//            val editor = getSharedPreferences(context).edit()
-//            editor.putString(SEARCH_LIST, jsonString)
-//            editor.apply()
-//        }
-//    }
-//
-//    fun setSearchResult(context: Context): List<Document>? {
-//        val jsonString = getSharedPreferences(context).getString(SEARCH_LIST, null)
-//        return Gson().fromJson(jsonString, object : TypeToken<List<Document>>() {}.type)
-//    }
 }

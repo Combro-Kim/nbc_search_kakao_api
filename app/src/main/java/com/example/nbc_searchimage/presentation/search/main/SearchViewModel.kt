@@ -17,7 +17,7 @@ class SearchViewModel(private val repository: SelectedItemRepository) : ViewMode
     private val _imageItems : MutableLiveData<List<Document>> = MutableLiveData()
     val imageItems: LiveData<List<Document>> get() = _imageItems
 
-    // 좋아요 처리(room)
+    // 좋아요
     private val _isLikedItems: LiveData<List<SelectedItemEntity>> = repository.getAllSelectedItems()
     val isLikedItems: LiveData<List<SelectedItemEntity>> get() = _isLikedItems
 
@@ -30,6 +30,7 @@ class SearchViewModel(private val repository: SelectedItemRepository) : ViewMode
             try {
                 val imageResponse = networkClient.searchNetWork.getImageResponse(query)
                 val newDataset = imageResponse.documents ?: emptyList()
+
                 _imageItems.value = newDataset
 
             } catch (_: Exception) { }
@@ -41,9 +42,9 @@ class SearchViewModel(private val repository: SelectedItemRepository) : ViewMode
         viewModelScope.launch {
             // Document에서 SelectedItemEntity로 변환하여 저장
             val entity = SelectedItemEntity(
-                displaySiteName = selectedItem.display_sitename,
+                displaySiteName = selectedItem.displaySiteName,
                 datetime = selectedItem.datetime,
-                thumbnailUrl = selectedItem.thumbnail_url,
+                thumbnailUrl = selectedItem.thumbnailUrl,
                 isLiked = true
             )
             repository.insertSelectedItem(entity)
