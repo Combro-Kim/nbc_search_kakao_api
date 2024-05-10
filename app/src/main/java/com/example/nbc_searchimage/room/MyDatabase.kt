@@ -10,8 +10,6 @@ abstract class MyDatabase : RoomDatabase() {
     abstract fun selectedItemDao(): SelectedItemDAO
 
     companion object {
-
-
         @Volatile
         private var INSTANCE: MyDatabase? = null
 //        private val MIGRATION_1_2 = object : Migration(1, 2) {

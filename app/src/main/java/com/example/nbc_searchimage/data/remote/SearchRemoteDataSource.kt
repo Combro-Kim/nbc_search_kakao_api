@@ -14,5 +14,4 @@ interface SearchRemoteDataSource {
         @Query("size") size:Int = 80,
         @Query("sort") sort:String = "recency"
     ) : DocumentResponse
-    // : DustResponse
 }

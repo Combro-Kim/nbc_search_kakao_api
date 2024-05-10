@@ -6,13 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.nbc_searchimage.data.remote.Document
-import com.example.nbc_searchimage.data.repository.SearchRepositoryImpl
+import com.example.nbc_searchimage.presentation.search.repository.SearchRepositoryImpl
 import com.example.nbc_searchimage.network.RetrofitClient
 import com.example.nbc_searchimage.presentation.search.model.SearchItemEntity
 import com.example.nbc_searchimage.presentation.search.repository.SearchRepository
 import com.example.nbc_searchimage.room.SelectedItemEntity
-import com.example.nbc_searchimage.room.SelectedItemRepository
 import kotlinx.coroutines.launch
 
 class SearchViewModel(private val searchRepository: SearchRepository) : ViewModel() {

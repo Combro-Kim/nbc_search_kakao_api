@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,9 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.nbc_searchimage.data.SharedPreferencesManager
 import com.example.nbc_searchimage.databinding.FragmentSearchBinding
 import com.example.nbc_searchimage.presentation.search.adapter.ImageListAdapter
-import com.example.nbc_searchimage.room.MyDatabase
-import com.example.nbc_searchimage.room.SelectedItemRepository
-import com.google.android.material.snackbar.Snackbar
 
 
 class SearchFragment : Fragment() {

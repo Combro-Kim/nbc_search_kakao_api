@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.nbc_searchimage.databinding.FragmentMystorageBinding
 import com.example.nbc_searchimage.presentation.myStorage.adapter.MyStorageAdapter
 import com.example.nbc_searchimage.room.MyDatabase
-import com.example.nbc_searchimage.room.SelectedItemRepository
+import com.example.nbc_searchimage.room.repository.SelectedItemRepositoryImpl
 
 
 class MyStorageFragment : Fragment() {
@@ -20,7 +20,7 @@ class MyStorageFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: MyStorageAdapter
     private val viewModel by viewModels<MyStorageViewModel> {
-        MyStorageViewModelFactory(SelectedItemRepository(MyDatabase.getDatabase(requireContext()).selectedItemDao()))
+        MyStorageViewModelFactory(SelectedItemRepositoryImpl(MyDatabase.getDatabase(requireContext()).selectedItemDao()))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

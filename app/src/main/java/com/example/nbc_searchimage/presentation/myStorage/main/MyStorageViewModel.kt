@@ -4,13 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
+import com.example.nbc_searchimage.network.RetrofitClient
 import com.example.nbc_searchimage.room.SelectedItemEntity
-import com.example.nbc_searchimage.room.SelectedItemRepository
+import com.example.nbc_searchimage.room.repository.SelectedItemRepository
+import com.example.nbc_searchimage.room.repository.SelectedItemRepositoryImpl
 import kotlinx.coroutines.launch
+import javax.sql.DataSource
 
 class MyStorageViewModel(private val repository: SelectedItemRepository) : ViewModel() {
 
-    private val _selectedItems: LiveData<List<SelectedItemEntity>> = repository.getAllSelectedItems()
+    private val _selectedItems: LiveData<List<SelectedItemEntity>> = repository.likedSelectedItems()
     val selectedItems: LiveData<List<SelectedItemEntity>> get() = _selectedItems
 
     fun deleteSelectedItem(selectedItem: SelectedItemEntity) {
@@ -28,3 +32,14 @@ class MyStorageViewModelFactory(private val repository: SelectedItemRepository) 
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+//class MyStorageViewModelFactory : ViewModelProvider.Factory {
+//    private val repository = SelectedItemRepositoryImpl(DataSource, RetrofitClient.searchGitHubUser)
+//    override fun <T : ViewModel> create(
+//        modelClass: Class<T>,
+//        extras: CreationExtras
+//    ): T {
+//        return GitHubUserViewModel(
+//            repository
+//        ) as T
+//    }
+//}
