@@ -10,7 +10,6 @@
 <br>
 
 ### 📍이미지 검색 Fragment
-구현
 1. 검색어 입력하고 검색 버튼 누르면 검색된 이미지 리스트 보여주기
 2. 검색 버튼은 누르면 키보드는 숨김 처리
 3. API 검색 결과 받아오기(thumbnail_url, display_sitename, datetime)
