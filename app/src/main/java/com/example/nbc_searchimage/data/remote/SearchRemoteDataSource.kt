@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface SearchRemoteDataSource {
     @Headers("Authorization: ${BuildConfig.API_KEY}")
-    @GET("v2/search/")
+    @GET("v2/search/image")
     suspend fun getDocumentResponse(
         @Query("query") query:String,
         @Query("size") size:Int = 80,

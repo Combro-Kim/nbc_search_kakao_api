@@ -11,7 +11,6 @@ class MyStorageViewHolder(private val binding: ItemListBinding): RecyclerView.Vi
     fun bind(selectedItem: SelectedItemEntity){
         binding.apply {
             tvSiteName.text = selectedItem.displaySiteName
-
             val dateTime = OffsetDateTime.parse(selectedItem.datetime)
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             tvDate.text = dateTime.format(formatter)

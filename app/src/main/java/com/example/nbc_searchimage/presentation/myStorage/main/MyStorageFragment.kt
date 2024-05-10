@@ -46,7 +46,6 @@ class MyStorageFragment : Fragment() {
                 if (position >= 0 && position < adapter.itemCount) {
                     val selectedItem = adapter.currentList[position]
                     viewModel.deleteSelectedItem(selectedItem)
-
                     viewModel.selectedItems.observe(viewLifecycleOwner) { items ->
                         // 삭제한 아이템 뒤의 데이터들의 position 값 -1씩
                         val updatedItems = items.mapIndexed { index, item ->

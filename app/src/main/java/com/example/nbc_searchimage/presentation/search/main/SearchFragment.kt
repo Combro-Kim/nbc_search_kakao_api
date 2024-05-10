@@ -3,6 +3,7 @@ package com.example.nbc_searchimage.presentation.search.main
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,14 +15,26 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nbc_searchimage.data.SharedPreferencesManager
 import com.example.nbc_searchimage.databinding.FragmentSearchBinding
+import com.example.nbc_searchimage.network.RetrofitClient
 import com.example.nbc_searchimage.presentation.search.adapter.ImageListAdapter
+import com.example.nbc_searchimage.presentation.search.repository.SearchRepository
+import com.example.nbc_searchimage.presentation.search.repository.SearchRepositoryImpl
+import com.example.nbc_searchimage.room.MyDatabase
+import com.example.nbc_searchimage.room.repository.SelectedItemRepository
+import com.example.nbc_searchimage.room.repository.SelectedItemRepositoryImpl
 
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModels<SearchViewModel>{
-        SearchViewModelFactory()
+
+    private val viewModel by viewModels<SearchViewModel> {
+        SearchViewModelFactory(
+            searchRepository = SearchRepositoryImpl(RetrofitClient.searchNetWork),
+            selectedItemRepository = SelectedItemRepositoryImpl(
+                MyDatabase.getDatabase(requireContext()).selectedItemDao()
+            )
+        )
     }
 
     private lateinit var adapter: ImageListAdapter
@@ -41,11 +54,11 @@ class SearchFragment : Fragment() {
         scrollUpEvent()
     }
 
-    private fun initView(){
+    private fun initView() {
         //검색어 show
         val setSearchWord = SharedPreferencesManager.setSearchWord(requireContext())
         binding.etSearch.setText(setSearchWord)
-        if(!setSearchWord.isNullOrEmpty()){
+        if (!setSearchWord.isNullOrEmpty()) {
             viewModel.getSearchImageList(setSearchWord)
         }
 
@@ -63,13 +76,15 @@ class SearchFragment : Fragment() {
 
         adapter.itemClick = object : ImageListAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
-                //여기에 room 데이터 추가
                 val selectedItem = adapter.currentList[position]
-                viewModel.saveSelectedItem(selectedItem)
-//                Snackbar.make(view,"보관함에 추가되었습니다.",Snackbar.LENGTH_SHORT).show()
+                if (selectedItem.isLiked) {
+                    viewModel.deleteSelectedItem(selectedItem)
+                    Log.d("eeeeeee","$selectedItem")
+                } else {
+                    viewModel.saveSelectedItem(selectedItem)
+                }
+                selectedItem.isLiked = !selectedItem.isLiked
                 adapter.notifyItemChanged(position)
-                //listAdapter를 사용해서 notify를 할 필요가 없지만
-                //좋아요를 눌렀을 때 해당 아이템에 좋아요 아이콘 업데이트를 위해 넣었다.
             }
         }
 
@@ -85,15 +100,11 @@ class SearchFragment : Fragment() {
     private fun initViewModel() {
         viewModel.getSearchImageList.observe(viewLifecycleOwner) { images ->
             adapter.submitList(images)
-            //ListAdapter에 속한 메서드로 Recyclerview에 표시할 데이터 목록을 제출하는데 사용된다.
-            //새 데이터와 기존 데이터를ㄹ 비교하여 변경 내용을 개선하고 Recyclerview를 업데이트한다.
-            //submitList(새로운 데이터)
-//            SharedPreferencesManager.getSearchResult(requireContext(), images) //검색 결과 리스트 저장
         }
-//        viewModel.isLikedItems.observe(viewLifecycleOwner) { items ->
-//            likedItems = items.map { it.thumbnailUrl }.toMutableSet() // 좋아요된 이미지들의 URL을 업데이트
-//            adapter.likedItems = likedItems // 어댑터에 좋아요된 이미지들의 URL 집합 전달
-//        }
+        viewModel.isLikedItems.observe(viewLifecycleOwner) { items ->
+            likedItems = items.map { it.thumbnailUrl }.toMutableSet() // 좋아요된 이미지들의 URL을 업데이트
+            adapter.likedItems = likedItems // 어댑터에 좋아요된 이미지들의 URL 집합 전달
+        }
     }
 
     //검색

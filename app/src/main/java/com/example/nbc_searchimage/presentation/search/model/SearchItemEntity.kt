@@ -9,4 +9,5 @@ data class SearchItemEntity(
     val datetime: String,
     val displaySiteName: String,
     val thumbnailUrl: String,
+    var isLiked: Boolean = false
 )

@@ -30,7 +30,7 @@ class ImageListAdapter : ListAdapter<SearchItemEntity, ImageListViewHolder>(Imag
         }
     }
 
-    // 기존 <-> 변경되는 데이터 확인
+    // 기존 <-> 변경되는 데이터 비교
     private class ImageDiffCallback : DiffUtil.ItemCallback<SearchItemEntity>() {
         override fun areItemsTheSame(oldItem: SearchItemEntity, newItem: SearchItemEntity): Boolean {
             return oldItem.thumbnailUrl == newItem.thumbnailUrl

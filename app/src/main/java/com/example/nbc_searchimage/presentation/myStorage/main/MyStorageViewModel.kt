@@ -4,13 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.nbc_searchimage.network.RetrofitClient
 import com.example.nbc_searchimage.room.SelectedItemEntity
 import com.example.nbc_searchimage.room.repository.SelectedItemRepository
-import com.example.nbc_searchimage.room.repository.SelectedItemRepositoryImpl
 import kotlinx.coroutines.launch
-import javax.sql.DataSource
 
 class MyStorageViewModel(private val repository: SelectedItemRepository) : ViewModel() {
 
@@ -24,10 +20,10 @@ class MyStorageViewModel(private val repository: SelectedItemRepository) : ViewM
     }
 }
 
-class MyStorageViewModelFactory(private val repository: SelectedItemRepository) : ViewModelProvider.Factory {
+class MyStorageViewModelFactory( private val selectedItemRepository: SelectedItemRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MyStorageViewModel::class.java)) {
-            return MyStorageViewModel(repository) as T
+            return MyStorageViewModel(selectedItemRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

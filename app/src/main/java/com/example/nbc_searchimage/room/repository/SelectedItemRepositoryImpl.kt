@@ -8,7 +8,7 @@ import com.example.nbc_searchimage.room.SelectedItemEntity
 class SelectedItemRepositoryImpl(private val selectedItemDao: SelectedItemDAO): SelectedItemRepository {
     //선택한 아이템 추가
     override suspend fun insertSelectedItem(selectedItem: SelectedItemEntity) {
-        selectedItemDao.getAllSelectedItems()
+        selectedItemDao.insertSelectedItem(selectedItem)
     }
 
     //좋아요
@@ -19,5 +19,10 @@ class SelectedItemRepositoryImpl(private val selectedItemDao: SelectedItemDAO): 
     //선택한 아이템 삭제
     override suspend fun deleteSelectedItem(selectedItem: SelectedItemEntity) {
         selectedItemDao.deleteSelectedItem(selectedItem)
+    }
+
+    override suspend fun isItemSelected(thumbnailUrl: String): Boolean {
+        val selectedItem = selectedItemDao.getSelectedItemByThumbnailUrl(thumbnailUrl)
+        return selectedItem != null
     }
 }

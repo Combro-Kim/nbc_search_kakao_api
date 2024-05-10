@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter
 class ImageListViewHolder(private val binding: ItemListBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(imageItem: SearchItemEntity, isLiked: Boolean) {
+//    fun bind(imageItem: SearchItemEntity) {
         binding.apply {
 //            tvSiteName.text = imageItem.display_sitename
             tvSiteName.text = imageItem.displaySiteName

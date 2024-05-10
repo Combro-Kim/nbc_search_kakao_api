@@ -10,26 +10,27 @@ import com.example.nbc_searchimage.presentation.search.repository.SearchReposito
 import com.example.nbc_searchimage.network.RetrofitClient
 import com.example.nbc_searchimage.presentation.search.model.SearchItemEntity
 import com.example.nbc_searchimage.presentation.search.repository.SearchRepository
+import com.example.nbc_searchimage.room.MyDatabase
 import com.example.nbc_searchimage.room.SelectedItemEntity
+import com.example.nbc_searchimage.room.repository.SelectedItemRepository
+import com.example.nbc_searchimage.room.repository.SelectedItemRepositoryImpl
 import kotlinx.coroutines.launch
 
-class SearchViewModel(private val searchRepository: SearchRepository) : ViewModel() {
-    private val networkClient = RetrofitClient
+class SearchViewModel(private val searchRepository: SearchRepository,
+    private val selectedItemRepository :SelectedItemRepository ) : ViewModel() {
 
     private val _getSearchImageList: MutableLiveData<List<SearchItemEntity>> = MutableLiveData()
     val getSearchImageList: LiveData<List<SearchItemEntity>> get() = _getSearchImageList
 
 
     // 좋아요 처리(room)
-//    private val _isLikedItems: LiveData<List<SelectedItemEntity>> = repository.getAllSelectedItems()
-//    val isLikedItems: LiveData<List<SelectedItemEntity>> get() = _isLikedItems
+    private val _isLikedItems: LiveData<List<SelectedItemEntity>> = selectedItemRepository.likedSelectedItems()
+    val isLikedItems: LiveData<List<SelectedItemEntity>> get() = _isLikedItems
 
 
     //검색된 데이터
     fun getSearchImageList(query: String) {
         viewModelScope.launch {
-            //viewModelScope ?
-            // ViewModel이 destory될 때 자식 코루틴들을 자동으로 취소하는 기능을 제공
             _getSearchImageList.value = searchRepository.getSearchImageList(query).documents
         }
     }
@@ -37,23 +38,58 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
     //마이데이터 저장
     fun saveSelectedItem(selectedItem: SearchItemEntity) {
         viewModelScope.launch {
-            // Document에서 SelectedItemEntity로 변환하여 저장
+            val thumbnailUrl = selectedItem.thumbnailUrl
+            val isAlreadySelected = selectedItemRepository.isItemSelected(thumbnailUrl)
+            if (isAlreadySelected) {
+                // 이미 선택된 아이템일 경우 삭제
+                val entity = SelectedItemEntity(
+                    displaySiteName = selectedItem.displaySiteName,
+                    datetime = selectedItem.datetime,
+                    thumbnailUrl = thumbnailUrl,
+                    isLiked = true)
+                selectedItemRepository.deleteSelectedItem(entity)
+            } else {
+                // 선택되지 않은 아이템일 경우 저장
+                val entity = SelectedItemEntity(
+                    displaySiteName = selectedItem.displaySiteName,
+                    datetime = selectedItem.datetime,
+                    thumbnailUrl = thumbnailUrl,
+                    isLiked = true
+                )
+                selectedItemRepository.insertSelectedItem(entity)
+            }
+        }
+    }
+    //todo 문제 1
+    // SearchItemEntity -> SelectedItemEntity
+    fun deleteSelectedItem(selectedItem: SearchItemEntity) {
+        viewModelScope.launch {
             val entity = SelectedItemEntity(
                 displaySiteName = selectedItem.displaySiteName,
                 datetime = selectedItem.datetime,
                 thumbnailUrl = selectedItem.thumbnailUrl,
                 isLiked = true
             )
-//            repository.insertSelectedItem(entity)
+            selectedItemRepository.deleteSelectedItem(entity)
         }
     }
 }
 
 //todo SearchViewModelFactory 구현해보자!! -> 7강의
-class SearchViewModelFactory : ViewModelProvider.Factory {
-    private val repository = SearchRepositoryImpl(RetrofitClient.searchNetWork)
-    override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-        return SearchViewModel(repository) as T
+// hilt, koin 배워서 factory 지우기
+//class SearchViewModelFactory(private val repository: SelectedItemRepository) : ViewModelProvider.Factory {
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//        if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
+//            return SearchViewModel(repository) as T
+//        }
+//        throw IllegalArgumentException("Unknown ViewModel class")
+//    }
+//}
+class SearchViewModelFactory(private val searchRepository: SearchRepository, private val selectedItemRepository: SelectedItemRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
+            return SearchViewModel(searchRepository, selectedItemRepository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
-//SelectedItemRepository 인스턴스를 받는다. Repository를 생성
