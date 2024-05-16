@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 
 interface SearchRemoteDataSource {
-    @Headers("Authorization: ${BuildConfig.API_KEY}")
+    @Headers("Authorization: KakaoAK a1f5c532c747be7eb01ade357afef92a")
     @GET("v2/search/image")
     suspend fun getDocumentResponse(
         @Query("query") query:String,

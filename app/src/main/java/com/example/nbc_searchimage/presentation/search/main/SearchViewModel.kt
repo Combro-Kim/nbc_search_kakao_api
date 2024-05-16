@@ -17,7 +17,7 @@ import com.example.nbc_searchimage.room.repository.SelectedItemRepositoryImpl
 import kotlinx.coroutines.launch
 
 class SearchViewModel(private val searchRepository: SearchRepository,
-    private val selectedItemRepository :SelectedItemRepository ) : ViewModel() {
+                      private val selectedItemRepository :SelectedItemRepository ) : ViewModel() {
 
     private val _getSearchImageList: MutableLiveData<List<SearchItemEntity>> = MutableLiveData()
     val getSearchImageList: LiveData<List<SearchItemEntity>> get() = _getSearchImageList
@@ -85,7 +85,10 @@ class SearchViewModel(private val searchRepository: SearchRepository,
 //        throw IllegalArgumentException("Unknown ViewModel class")
 //    }
 //}
-class SearchViewModelFactory(private val searchRepository: SearchRepository, private val selectedItemRepository: SelectedItemRepository) : ViewModelProvider.Factory {
+class SearchViewModelFactory(
+    private val searchRepository: SearchRepository,
+    private val selectedItemRepository: SelectedItemRepository
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
             return SearchViewModel(searchRepository, selectedItemRepository) as T

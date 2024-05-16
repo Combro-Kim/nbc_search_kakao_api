@@ -18,3 +18,4 @@ fun List<Document>.asSearchImageEntity(): List<SearchItemEntity> {
         )
     }
 }
+//sp 선언내용 레파지토리로 이동

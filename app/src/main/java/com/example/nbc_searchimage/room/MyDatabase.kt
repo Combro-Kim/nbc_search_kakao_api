@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.*
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-//todo migration실습
+//todo migration 공부
 @Database(entities = [SelectedItemEntity::class], version = 1, exportSchema = false)
 abstract class MyDatabase : RoomDatabase() {
     abstract fun selectedItemDao(): SelectedItemDAO
@@ -16,6 +16,7 @@ abstract class MyDatabase : RoomDatabase() {
 //            override fun migrate(database: SupportSQLiteDatabase) {  }
 //        }
 
+        //todo context 넘기지 말고 application으로 변경
         fun getDatabase(context: Context): MyDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
